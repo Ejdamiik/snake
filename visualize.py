@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 import snake
 import time
+import os
 from pygame.locals import *
 from typing import Optional, List, Tuple
 
@@ -23,6 +24,14 @@ class SnakeVisualize:
         c - count of columns
         speed - speed of refreshing (ms)
         """
+
+        # Loading current best
+        dirname = os.path.dirname(__file__)
+        self.best_path = dirname + r"\work_files\best.txt"
+
+        with open(self.best_path, "r") as f:
+
+            self.best = int(f.read())
 
         self.width = width
         self.height = height
@@ -112,23 +121,42 @@ class SnakeVisualize:
 
         message = f"Your score: {len(self.engine.snake)}"
 
+        # If we reached new high score
+        if len(self.engine.snake) > self.best:
+            self.best = len(self.engine.snake)
+            self.save_new_best()
+
+        message_best = f"Your current best: {self.best}"
+
+        center = self.screen.get_rect().center
+
         # Display text
         font = pg.font.Font(None, 32)
         text = font.render(message, True, self.cell_color, self.bg_color)
-        textRect = text.get_rect(center = self.screen.get_rect().center)
+        textBest = font.render(message_best, True, self.cell_color, self.bg_color)
+        textRect = text.get_rect(center = center)
+        textRectBest = textBest.get_rect(center = (center[0], center[1] + self.height // 3))
         self.screen.blit(text, textRect)
+        self.screen.blit(textBest, textRectBest)
 
         pg.display.update()
         
+        # Wait for 5 seconds
         time.sleep(5)
+
+        # Reset game
         self.screen.fill(self.bg_color)
         self.engine = snake.Snake(self.mrow, self.mcolumn)
 
 
+    def save_new_best(self):
+
+        with open(self.best_path, "w") as f:
+            f.write(str(self.best))
+
+
     def run(self) -> None:
-        """
-        Pygame loop : interactive mode
-        """
+
         while True:
             for event in pg.event.get():
                 if event.type == QUIT:
