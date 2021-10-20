@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import snake
+import time
 from pygame.locals import *
 from typing import Optional, List, Tuple
 
