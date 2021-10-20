@@ -1,6 +1,5 @@
 import pygame as pg
 import sys
-import time
 import snake
 from pygame.locals import *
 from typing import Optional, List, Tuple
@@ -66,16 +65,15 @@ class SnakeVisualize:
         for row in data:
             x = 0  # for every row we start at the left of the screen again
             for item in row:
-                if item == 0:
+                if item == 0:   # bg
                     self.createSquare(x, y, self.bg_color)
-                elif item == 1:
+                elif item == 1: # snake
                     self.createSquare(x, y, self.cell_color)
-                else:
+                else:   # food
                     self.createSquare(x, y, self.food_color)
 
-                # for ever item/number in that row we move one "step" to the right
                 x += self.grid_node_width
-            y += self.grid_node_height   # for every new row we move one "step" downwards
+            y += self.grid_node_height
 
         pg.display.update()
 
@@ -108,9 +106,6 @@ class SnakeVisualize:
         self.engine.direction = 4
 
     def ending(self) -> None:
-        """
-        Ending screen
-        """
 
         self.screen.fill(self.bg_color)
 
@@ -139,6 +134,7 @@ class SnakeVisualize:
                     # Window quit
                     pg.quit()
                     sys.exit()
+
                 if event.type == self.MOVEEVENT:
 
                     if self.move() == "Colision":

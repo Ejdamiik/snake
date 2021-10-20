@@ -4,11 +4,10 @@ from typing import List
 
 class Snake:
 
-	def __init__(self, r: int, c: int) -> List[int]:
+	def __init__(self, r: int, c: int) -> None:
 
 		self.columns = c
 		self.rows = r
-
 		self.desk = [[0 for _ in range(c)] for _ in range(r)]
 		self.directions = {
 		1: (0, -1),
