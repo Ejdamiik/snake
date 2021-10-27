@@ -46,7 +46,7 @@ class SnakeVisualize:
         self.fps = 30
         self.CLOCK = pg.time.Clock()
         pg.init()
-        pg.display.set_caption("Vizualize matrixes")
+        pg.display.set_caption("Snake")
         self.screen = pg.display.set_mode((self.width, self.height), RESIZABLE)
 
         self.mrow = len(self.engine.desk)    # count of rows in matrix
