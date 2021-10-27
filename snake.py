@@ -15,6 +15,7 @@ class Snake:
 		3: (-1, 0),
 		4: (1, 0)
 		}
+		self.food_eaten = False
 
 		self.direction = 1
 
@@ -38,6 +39,7 @@ class Snake:
 		4 - right
 		"""
 
+		self.food_eaten = False
 		dy, dx = self.directions[self.direction]
 
 		# moving snake
@@ -76,6 +78,7 @@ class Snake:
 		if (new_x, new_y) == (self.food_x, self.food_y):
 
 			self.eat_food()
+			self.food_eaten = True
 
 		self.update_desk()
 

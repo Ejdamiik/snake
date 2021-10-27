@@ -3,6 +3,7 @@ import sys
 import snake
 import time
 import os
+import file_handle
 from pygame.locals import *
 from typing import Optional, List, Tuple
 
@@ -29,9 +30,9 @@ class SnakeVisualize:
         dirname = os.path.dirname(__file__)
         self.best_path = dirname + r"\work_files\best.txt"
 
-        with open(self.best_path, "r") as f:
+        self.best = int(file_handle.get_content(self.best_path))
 
-            self.best = int(f.read())
+        self.score = 0
 
         self.width = width
         self.height = height
@@ -45,9 +46,12 @@ class SnakeVisualize:
         # initializing pygame window
         self.fps = 30
         self.CLOCK = pg.time.Clock()
+
         pg.init()
+        self.font = pg.font.Font(None, 32)
         pg.display.set_caption("Snake")
-        self.screen = pg.display.set_mode((self.width, self.height), RESIZABLE)
+
+        pg.mixer.music.load(dirname + r"\work_files\eat_sound.mp3")
 
         self.mrow = len(self.engine.desk)    # count of rows in matrix
         self.mcolumn = len(self.engine.desk[0])  # count of columns in matrix
@@ -61,6 +65,33 @@ class SnakeVisualize:
         self.MOVEEVENT, t = pg.USEREVENT+1, 250 // speed    # doing sth without interaction
         pg.time.set_timer(self.MOVEEVENT, t)
 
+        self.init_screen()
+
+
+    def init_screen(self):
+
+        LOWER_BAR_HEIGHT = self.height // 5
+        LINE_COLOR = self.cell_color
+        LINE_THICKNESS = 5
+
+        self.screen = pg.display.set_mode((self.width, self.height + LOWER_BAR_HEIGHT))
+        pg.draw.line(self.screen, LINE_COLOR, (0, self.height), (self.width, self.height), LINE_THICKNESS)
+        self.show_score()
+
+
+    def show_score(self):
+
+
+        MSG = f"Score: {self.score}"
+        x_center, y_center = self.screen.get_rect().center
+        y_center += self.height // 2
+
+
+        text = self.font.render(MSG, True, self.cell_color, self.bg_color)
+        textRect = text.get_rect(center = (x_center, y_center))
+        self.screen.blit(text, textRect)
+
+        pg.display.update()
 
 
     def createSquare(self, x: int, y: int, color: Tuple) -> None:
@@ -93,6 +124,11 @@ class SnakeVisualize:
         if self.engine.step() == "Colision":
             return "Colision"
 
+        if self.engine.food_eaten is True:
+            pg.mixer.music.play()
+            self.score += 1
+            self.show_score()
+
         self.draw_matrix(self.engine.desk)
 
 
@@ -119,21 +155,20 @@ class SnakeVisualize:
 
         self.screen.fill(self.bg_color)
 
-        message = f"Your score: {len(self.engine.snake)}"
+        message = f"Your score: {self.score}"
 
         # If we reached new high score
-        if len(self.engine.snake) > self.best:
-            self.best = len(self.engine.snake)
-            self.save_new_best()
+        if self.score > self.best:
+            self.best = self.score
+            file_handle.save_content(self.best_path, str(self.best))
 
         message_best = f"Your current best: {self.best}"
 
         center = self.screen.get_rect().center
 
         # Display text
-        font = pg.font.Font(None, 32)
-        text = font.render(message, True, self.cell_color, self.bg_color)
-        textBest = font.render(message_best, True, self.cell_color, self.bg_color)
+        text = self.font.render(message, True, self.cell_color, self.bg_color)
+        textBest = self.font.render(message_best, True, self.cell_color, self.bg_color)
         textRect = text.get_rect(center = center)
         textRectBest = textBest.get_rect(center = (center[0], center[1] + self.height // 3))
         self.screen.blit(text, textRect)
@@ -147,12 +182,8 @@ class SnakeVisualize:
         # Reset game
         self.screen.fill(self.bg_color)
         self.engine = snake.Snake(self.mrow, self.mcolumn)
-
-
-    def save_new_best(self):
-
-        with open(self.best_path, "w") as f:
-            f.write(str(self.best))
+        self.score = 0
+        self.init_screen()
 
 
     def run(self) -> None:
