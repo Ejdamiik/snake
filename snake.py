@@ -54,21 +54,21 @@ class Snake:
 		x, y = self.snake[0]
 
 		# Boundaries
-		if x + dx < 0:
-			new_x = len(self.desk[0]) - 1
-		elif x + dx > len(self.desk[0]) - 1:
+
+
+		new_x = dx + x
+
+		if new_x < 0:
+			new_x = len(self.desk) - 1
+		elif new_x > len(self.desk) - 1:
 			new_x = 0
-		else:
-			new_x = dx + x
 
+		new_y = y + dy
 
-		# crossing boundaries
-		if y + dy < 0:
-			new_y = len(self.desk) - 1
-		elif y + dy > len(self.desk) - 1:
+		if new_y < 0:
+			new_y = len(self.desk[0]) - 1
+		elif new_y > len(self.desk[0]) - 1:
 			new_y = 0
-		else:
-			new_y = y + dy
 
 		if (new_x, new_y) in self.snake:
 			return "Colision"

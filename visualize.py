@@ -102,6 +102,7 @@ class SnakeVisualize:
 
     def draw_matrix(self, data: List[List[int]]) -> None:
 
+
         y = 0  # we start at the top of the screen
         for row in data:
             x = 0  # for every row we start at the left of the screen again
