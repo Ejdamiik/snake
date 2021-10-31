@@ -133,24 +133,29 @@ class SnakeVisualize:
         self.draw_matrix(self.engine.desk)
 
 
+    # Forbid to go reversed direction
     def up(self) -> None:
 
-        self.engine.direction = 1
+    	if self.engine.direction != 2:
+        	self.engine.direction = 1
 
 
     def down(self) -> None:
 
-        self.engine.direction = 2
+    	if self.engine.direction != 1:
+        	self.engine.direction = 2
 
 
     def left(self) -> None:
 
-        self.engine.direction = 3
+    	if self.engine.direction != 4:
+        	self.engine.direction = 3
 
 
     def right(self) -> None:
 
-        self.engine.direction = 4
+    	if self.engine.direction != 3:
+        	self.engine.direction = 4
 
     def ending(self) -> None:
 
@@ -178,7 +183,7 @@ class SnakeVisualize:
         pg.display.update()
         
         # Wait for 5 seconds
-        time.sleep(5)
+        pg.time.wait(5000)
 
         # Reset game
         self.screen.fill(self.bg_color)

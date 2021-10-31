@@ -8,6 +8,8 @@ class Snake:
 
 		self.columns = c
 		self.rows = r
+
+		# Desk is representation of our gaming board
 		self.desk = [[0 for _ in range(c)] for _ in range(r)]
 		self.directions = {
 		1: (0, -1),
@@ -17,6 +19,7 @@ class Snake:
 		}
 		self.food_eaten = False
 
+		# initial direction
 		self.direction = 1
 
 		# coords of head
@@ -27,6 +30,7 @@ class Snake:
 
 		self.snake = [(init_x, init_y)]
 
+		# Show desk
 		self.update_desk()
 
 
