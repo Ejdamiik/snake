@@ -4,5 +4,5 @@
     "food_color": [255, 0, 0],
     "speed" : 3,
     "dimensions": [30,30],
-    "screen_size": [700,700]
+    "screen_size": [600,600]
 }
