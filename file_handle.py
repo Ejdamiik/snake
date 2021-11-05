@@ -1,4 +1,4 @@
-def get_content(path):
+def get_content(path: str) -> str:
     """
     returns content of file at path
     """
@@ -8,7 +8,7 @@ def get_content(path):
     return content
 
 
-def save_content(path, content):
+def save_content(path: str, content: str) -> None:
     """
     Saves content to path
     """
